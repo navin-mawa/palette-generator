@@ -1,15 +1,25 @@
-pipeline{
-        agent any
-        stages{
-            stage('Make Directory'){
-                steps{
-                    sh "mkdir ~/palette-generator1"
-                }
-            }
-            stage('Make Files'){
-                steps{
-                    sh "touch ~/palette-generator1/file1 ~/palette-generator1/file2"
-                }
+pipeline {
+    agent any
+    environment {
+        DATABASE_URI = credentials("DATABASE_URI")
+        SECRET_KEY = credentials("SECRET_KEY")
+
+    }
+    stages {
+        stage('Install Dependencies') {
+            steps {
+                sh "bash jenkins/install.sh"
             }
         }
-}
+        stage('Testing') {
+            steps {
+                sh "bash jenkins/test.sh"
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sh 'python3 create.py'
+                sh "bash jenkins/deploy.sh"
+            }
+        }
+    }
