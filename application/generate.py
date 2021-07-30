@@ -34,10 +34,8 @@ def name():
     name = [random.choice(words)]
     
     if random.randint(0,10) < 9:
-        print('word 2')
         name.append(random.choice(words))
         if random.randint(0,10) == 0: 
-            print('word 3')
             name.append(random.choice(words))
     
     name = list(dict.fromkeys(name)) # prevent duplicate words
