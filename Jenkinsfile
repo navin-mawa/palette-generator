@@ -1,31 +1,27 @@
 pipeline {
     agent any
-    environment {
-        DATABASE_URI = credentials("DATABASE_URI")
-        SECRET_KEY = credentials("SECRET_KEY")
 
-    }
     stages {
         stage('Install Dependencies') {
             steps {
-                sh "bash jenkins/install.sh"
+                sh "bash scripts/install.sh"
             }
         }
         stage('Testing') {
             steps {
-                sh "bash jenkins/test.sh"
+                sh "bash scripts/test.sh"
             }
         }
         stage('Deploy') {
             steps {
-                sh "bash jenkins/deploy.sh"
+                sh "bash scripts/deploy.sh"
             }
         }
     }
     post {
         always {
             cobertura coberturaReportFile: 'coverage.xml',  failNoReports: false
-            junit 'junit/test-results.xml'
+            junit 'junit.xml'
         }
     }
 }
